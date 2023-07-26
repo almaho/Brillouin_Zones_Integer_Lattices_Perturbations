@@ -449,6 +449,87 @@ def __main__():
 
 
     dataframe['bound'] = 1/ np.sqrt(dataframe.b_zone)
+    
+    def lengthSquare(X, Y): 
+        xDiff = X[0] - Y[0] 
+        yDiff = X[1] - Y[1] 
+        return xDiff * xDiff + yDiff * yDiff
+          
+    def calc_angle(A, B, C): 
+          
+    
+        a2 = lengthSquare(B, C) 
+        b2 = lengthSquare(A, C) 
+        c2 = lengthSquare(A, B) 
+      
+    
+        a = math.sqrt(a2); 
+        b = math.sqrt(b2); 
+        c = math.sqrt(c2); 
+      
+    
+        betta = math.acos((a2 + c2 - b2) / 
+                             (2 * a * c)); 
+    
+      
+    
+        betta = betta * 180 / math.pi; 
+        return betta
+    
+    maximum_distances = []
+    minimum_distances = []
+    for i in range(order) :
+        
+        maximum = 0 
+        minimum = np.inf
+        for face in array[i] :
+            
+            
+            
+            
+            hedges = dc.findRegionGivenSegment(face.halfEdge)
+            for he in hedges :
+                distance = (he.tail.x)**2 + (he.tail.y)**2 
+                if distance > maximum :
+                    maximum = distance
+                if distance < minimum :
+                    minimum = distance
+                    
+                angle1 = calc_angle([0, 0], [he.tail.x, he.tail.y], [he.next.tail.x, he.next.tail.y])
+                angle2 = calc_angle([0, 0], [he.next.tail.x, he.next.tail.y], [he.tail.x,he.tail.y] )
+                if (angle1 < 90) and (angle2 < 90) :
+                    x0 = 0
+                    y0 = 0
+                    x1 = he.tail.x
+                    y1 = he.tail.y
+                    x2 = he.next.tail.x
+                    y2 = he.next.tail.y
+                    
+                    d = np.abs((x2-x1)*(y1-y0) - (x1-x0)*(y2-y1)) / np.sqrt(np.square(x2-x1) + np.square(y2-y1))
+    #                 d = (math.sin(angle1)*((x1)**2 +(y1)**2) ) /2 
+                    if d*d < minimum :
+                        minimum = d*d
+            
+            
+        maximum_distances.append(maximum)
+        minimum_distances.append(minimum)
+            
+                         
+            
+            
+        
+        
+        
+    
+    dataframe['maximum_distances'] =  np.sqrt(maximum_distances)
+    dataframe['minimum_distances'] = np.sqrt(minimum_distances)
+    
+    dataframe['minimum_bound'] = np.sqrt(dataframe.b_zone-1) / np.sqrt (np.pi)
+    dataframe['maximum_bound'] = np.sqrt(dataframe.b_zone) / np.sqrt (np.pi)
+    
+    dataframe['width'] = (np.sqrt(dataframe.b_zone) / np.sqrt (np.pi))- np.sqrt(2)/2 
+    dataframe['upper'] = (np.sqrt(dataframe.b_zone) / np.sqrt (np.pi))+ np.sqrt(2)/2 
+    
 
 
 
