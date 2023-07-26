@@ -308,7 +308,7 @@ class DCEL:
 
     ####################
 
-def __main__():
+def read_file():
   
     file = open('points.txt', 'r') #read the file
     points = file.read()
@@ -330,6 +330,7 @@ def __main__():
     for i in range(int(len(edges_str)/2)):
          edges.append((int(edges_str[2*i]), int( edges_str[2*i+1] )))
     file.close() #close file
+    return points,edges
     
    
 
@@ -340,7 +341,7 @@ def __main__():
      
 
 
-
+def run_dcel(points, edges):
     segments = []
     for edge in edges :
         if edge[0] < edge[1] :
@@ -380,9 +381,10 @@ def __main__():
         
         array[face.order+1].append(face)
     
-        
-    order = 60
-    
+    return array
+  
+
+def calc_number_of_regions(array):
     # number of regions for every k :
     
     
@@ -399,6 +401,7 @@ def __main__():
     dataframe['number_of_regions'] = number_of_regions
     dataframe['karan'] = 6*dataframe.b_zone - 6
 
+    return dataframe
 # plt.figure(figsize=(9, 3*1.6))
 # plt.plot(dataframe.loc[2:].b_zone, dataframe.loc[2:].number_of_regions)
 # plt.plot(dataframe.loc[2:].b_zone, dataframe.loc[2:].karan)
@@ -406,6 +409,8 @@ def __main__():
 # print(dataframe.number_of_regions)
 
 # plt.plot(dataframe.b_zone, dataframe.number_of_regions.cumsum())
+
+def calc_areas(array, dataframe)
 
     areas = []
     for i in range(order) :
@@ -449,33 +454,33 @@ def __main__():
 
 
     dataframe['bound'] = 1/ np.sqrt(dataframe.b_zone)
-    
-    def lengthSquare(X, Y): 
-        xDiff = X[0] - Y[0] 
-        yDiff = X[1] - Y[1] 
-        return xDiff * xDiff + yDiff * yDiff
+ 
+    return dataframe
+ 
+ def lengthSquare(X, Y): 
+    xDiff = X[0] - Y[0] 
+    yDiff = X[1] - Y[1]
+    return xDiff * xDiff + yDiff * yDiff
           
-    def calc_angle(A, B, C): 
-          
-    
-        a2 = lengthSquare(B, C) 
-        b2 = lengthSquare(A, C) 
-        c2 = lengthSquare(A, B) 
+ def calc_angle(A, B, C): 
+    a2 = lengthSquare(B, C)
+    b2 = lengthSquare(A, C)
+    c2 = lengthSquare(A, B) 
+       
+     
+    a = math.sqrt(a2); 
+    b = math.sqrt(b2); 
+    c = math.sqrt(c2); 
       
     
-        a = math.sqrt(a2); 
-        b = math.sqrt(b2); 
-        c = math.sqrt(c2); 
-      
-    
-        betta = math.acos((a2 + c2 - b2) / 
+    betta = math.acos((a2 + c2 - b2) / 
                              (2 * a * c)); 
     
       
     
-        betta = betta * 180 / math.pi; 
-        return betta
-    
+     betta = betta * 180 / math.pi; 
+     return betta
+def calc_distances():
     maximum_distances = []
     minimum_distances = []
     for i in range(order) :
@@ -530,7 +535,7 @@ def __main__():
     dataframe['width'] = (np.sqrt(dataframe.b_zone) / np.sqrt (np.pi))- np.sqrt(2)/2 
     dataframe['upper'] = (np.sqrt(dataframe.b_zone) / np.sqrt (np.pi))+ np.sqrt(2)/2 
     
-
+    return dataframe
 
 
 
